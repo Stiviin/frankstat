@@ -1,7 +1,6 @@
-// lib/getCurrentUser.ts
 import { parse } from "cookie";
 import { verifyToken } from "./auth";
-import prisma from "../prisma";
+import prisma from "./prisma";
 
 export async function getCurrentUser(req: Request) {
   const cookie = req.headers.get("cookie") || "";

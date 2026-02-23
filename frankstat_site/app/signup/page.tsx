@@ -60,15 +60,49 @@ export default function SignupPage() {
     if (validateStep1()) setStep(2);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateStep2()) return;
-    setLoading(true);
-    // TODO: Replace with your API call
-    await new Promise((r) => setTimeout(r, 1800));
-    setLoading(false);
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  if (!validateStep2()) return;
+
+  setLoading(true);
+  
+  try {
+  const response = await fetch("/api/auth/register", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    fullName: form.fullName,
+    email: form.email,
+    phone: form.phone,
+    password: form.password,
+  }),
+});
+
+if (!response.ok) {
+  let errorMessage = "Unknown error";
+  try {
+    const errorData = await response.json();
+    errorMessage = errorData.error || errorMessage;
+  } catch {
+    // response body not JSON
+  }
+  console.error("Error:", errorMessage);
+  setErrors({ general: errorMessage });
+  setLoading(false);
+  return;
+}
+
+    const data = await response.json();
+    console.log("Success:", data);
+    // You can proceed after successful registration
     setDone(true);
-  };
+  } catch (error) {
+    console.error("Fetch error:", error);
+    // Show error message to user if needed
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <>

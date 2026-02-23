@@ -3,8 +3,12 @@
 import { useState } from "react";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";;
+
 
 export default function LoginPage() {
+  const router = useRouter();
+
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
   const [forgotMode, setForgotMode] = useState(false);
@@ -24,15 +28,49 @@ export default function LoginPage() {
     return Object.keys(e).length === 0;
   };
 
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!validate()) return;
+
+    const { email, password } = form; 
     setLoading(true);
-    // TODO: replace with your auth API call
-    await new Promise((r) => setTimeout(r, 1600));
-    setLoading(false);
-    // On success: router.push('/dashboard')
+
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!res.ok) {
+        let errorMessage = "Login failed";
+        try {
+          const errorData = await res.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch {}
+        alert(errorMessage);
+        setLoading(false);
+        return;
+      }
+
+      const data = await res.json();
+      console.log("Login successful:", data);
+
+      // ✅ router.push now works
+      router.push("/");
+    } catch (error) {
+      console.error("Error during login:", error);
+      alert("An error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
+
+
+
+
 
   const handleForgot = async (e: React.FormEvent) => {
     e.preventDefault();

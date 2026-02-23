@@ -1,7 +1,7 @@
 // app/api/auth/register/route.ts
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import prisma from "../../../../prisma";
+import prisma from "@/lib/prisma";
 import { hashPassword } from "@/lib/auth";
 import nodemailer from "nodemailer";
 
@@ -57,6 +57,10 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ ok: true });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message || "Invalid request" }, { status: 400 });
-  }
+  return NextResponse.json(
+    { error: err.message || "Something went wrong" },
+    { status: 400 }
+  );
+}
+
 }
