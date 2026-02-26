@@ -17,6 +17,8 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// prisma/schema.prisma
+
 model User {
   id            String   @id @default(cuid())
   fullName      String
@@ -26,4 +28,88 @@ model User {
   isVerified    Boolean  @default(false)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+
+  orders        Order[]
+  tickets       SupportTicket[]
+}
+
+model Order {
+  id               String      @id @default(cuid())
+  userId           String?
+  user             User?       @relation(fields: [userId], references: [id])
+
+  serviceId        String
+  serviceName      String
+  dimensions       String?
+  quantity         Int         @default(1)
+  finishType       String?
+  specialNotes     String?
+
+  totalPrice       Float
+  depositAmount    Float
+
+  artworkUrl       String
+  mpesaPhone       String
+  status           OrderStatus @default(PENDING_PAYMENT)
+
+  merchantRequestID String?
+  checkoutRequestID String?
+  mpesaReceipt      String?
+
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  payments         Payment[]
+
+  @@index([userId])
+  @@index([status])
+}
+
+model Payment {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id])
+  type      PaymentType
+  amount    Float
+  method    String   // e.g. "M-Pesa"
+  mpesaRef  String?
+  status    PaymentStatus @default(PENDING)
+  createdAt DateTime @default(now())
+}
+
+model SupportTicket {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  subject   String
+  message   String
+  status    TicketStatus @default(OPEN)
+  response  String?
+  createdAt DateTime @default(now())
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  PAID_DEPOSIT
+  PROCESSING
+  READY
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentType {
+  DEPOSIT
+  BALANCE
+}
+
+enum PaymentStatus {
+  CONFIRMED
+  PENDING
+  FAILED
+}
+
+enum TicketStatus {
+  OPEN
+  RESOLVED
+  IN_REVIEW
 }

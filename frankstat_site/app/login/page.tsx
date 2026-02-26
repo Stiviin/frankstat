@@ -68,11 +68,7 @@ export default function LoginPage() {
     }
   };
 
-
-
-
-
-  const handleForgot = async (e: React.FormEvent) => {
+const handleForgot = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!forgotEmail.includes("@")) return;
     setLoading(true);

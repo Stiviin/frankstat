@@ -151,10 +151,48 @@ export default function FrankstatPage() {
     setTimeout(() => formRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitted(true);
-  };
+// Inside your React component
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  // Prepare FormData
+  const data = new FormData();
+  data.append('service', formData.service);
+  data.append('dimension', formData.dimension);
+  data.append('customW', formData.customW);
+  data.append('customH', formData.customH);
+  data.append('quantity', formData.quantity.toString());
+  data.append('paperType', formData.paperType);
+  data.append('mpesa', formData.mpesa);
+ // data.append('notes', formData.notes || ""); // From textarea
+  
+  // Append calculated prices (validating again on backend is safer, but this passes the display values)
+  data.append('totalPrice', totalPrice.toString());
+  data.append('deposit', deposit.toString());
+
+  // Append the file
+  if (formData.imageFile) {
+    data.append('imageFile', formData.imageFile);
+  }
+
+  try {
+    const response = await fetch('/api/orders', {
+      method: 'POST',
+      body: data,
+    });
+
+    if (response.ok) {
+      setSubmitted(true);
+      // Success logic already handled in your JSX
+    } else {
+      const error = await response.json();
+      alert(`Error: ${error.error || 'Failed to submit order'}`);
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Network error. Please try again.');
+  }
+};
 
   return (
     <>

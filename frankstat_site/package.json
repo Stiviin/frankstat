@@ -12,6 +12,7 @@
     "@paralleldrive/cuid2": "^3.3.0",
     "@prisma/client": "^6.19.2",
     "ajv": "^8.18.0",
+    "axios": "^1.13.5",
     "bcrypt": "^6.0.0",
     "cookie": "^1.1.1",
     "cross-spawn": "^7.0.6",
