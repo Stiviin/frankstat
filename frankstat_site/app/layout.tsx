@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
 
+<<<<<<< HEAD
+=======
+import { AuthProvider } from "@/lib/auth-context";
+
+
+>>>>>>> 8f2e237 (Save local)
 export const metadata: Metadata = {
   title: "Frankstat | Premium Printing in Nairobi",
   description:
@@ -14,7 +20,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </head>
+<<<<<<< HEAD
       <body style={{ margin: 0, padding: 0 }}>{children}</body>
+=======
+      <body style={{ margin: 0, padding: 0 }}>{children}
+      <AuthProvider>{children}</AuthProvider>
+
+      </body>
+>>>>>>> 8f2e237 (Save local)
     </html>
   );
 }

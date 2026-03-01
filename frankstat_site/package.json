@@ -11,6 +11,10 @@
   "dependencies": {
     "@paralleldrive/cuid2": "^3.3.0",
     "@prisma/client": "^6.19.2",
+<<<<<<< HEAD
+=======
+    "@supabase/supabase-js": "^2.98.0",
+>>>>>>> 8f2e237 (Save local)
     "ajv": "^8.18.0",
     "axios": "^1.13.5",
     "bcrypt": "^6.0.0",

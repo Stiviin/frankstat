@@ -1,7 +1,11 @@
 // app/api/auth/register/route.ts
 import { NextResponse } from "next/server";
 import { z } from "zod";
+<<<<<<< HEAD
 import prisma from "@/lib/prisma";
+=======
+import { prisma } from "@/lib/prisma";
+>>>>>>> 8f2e237 (Save local)
 import { hashPassword } from "@/lib/auth";
 import nodemailer from "nodemailer";
 
